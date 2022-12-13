@@ -29,4 +29,4 @@ const plugin = fp(fastifyUserAgent, {
 
 module.exports = plugin
 module.exports.default = plugin
-module.exports.fastifyChangeMe = fastifyUserAgent
+module.exports.fastifyUserAgent = fastifyUserAgent
