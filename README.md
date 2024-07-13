@@ -1,8 +1,9 @@
 # fastify-user-agent
 User-agent information plugin for Fastify.
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![Build Status](https://github.com/Eomm/fastify-user-agent/workflows/ci/badge.svg)](https://github.com/Eomm/fastify-user-agent/actions)
+[![ci](https://github.com/Eomm/fastify-user-agent/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Eomm/fastify-user-agent/actions/workflows/ci.yml)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 
 ## Install
@@ -15,6 +16,7 @@ npm install fastify-user-agent
 
 | Plugin version | Fastify version |
 | -------------- |:---------------:|
+| `^2.0.0`       | `^5.0.0`        |
 | `^1.0.0`       | `^4.0.0`        |
 
 

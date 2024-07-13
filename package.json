@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "tap test/**/*.test.js"
+    "test": "tap --show-full-coverage"
   },
   "repository": {
     "type": "git",
@@ -25,12 +25,12 @@
   },
   "homepage": "https://github.com/Eomm/fastify-user-agent#readme",
   "dependencies": {
-    "fastify-plugin": "^4.5.1",
+    "fastify-plugin": "^5.0.0-pre.fv5.1",
     "useragent": "^2.3.0"
   },
   "devDependencies": {
-    "fastify": "^4.27.0",
+    "fastify": "^5.0.0-alpha.3",
     "standard": "^17.1.0",
-    "tap": "^19.2.2"
+    "tap": "^21.0.0"
   }
 }
