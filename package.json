@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "tap test/**/*.test.js"
+    "test": "tap --show-full-coverage"
   },
   "repository": {
     "type": "git",
@@ -19,18 +19,19 @@
     "useragent"
   ],
   "author": "Manuel Spigolon <behemoth89@gmail.com> (https://github.com/Eomm)",
+  "funding": "https://github.com/Eomm/fastify-user-agent?sponsor=1",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Eomm/fastify-user-agent/issues"
   },
   "homepage": "https://github.com/Eomm/fastify-user-agent#readme",
   "dependencies": {
-    "fastify-plugin": "^4.4.0",
+    "fastify-plugin": "^5.0.0",
     "useragent": "^2.3.0"
   },
   "devDependencies": {
-    "fastify": "^4.10.2",
-    "standard": "^17.0.0",
-    "tap": "^16.3.2"
+    "fastify": "^5.0.0",
+    "standard": "^17.1.0",
+    "tap": "^21.0.0"
   }
 }

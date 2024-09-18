@@ -23,7 +23,7 @@ function fastifyUserAgent (fastify, options, next) {
 }
 
 const plugin = fp(fastifyUserAgent, {
-  fastify: '^4.x',
+  fastify: '^5.x',
   name: 'fastify-user-agent'
 })
 
