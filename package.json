@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/Eomm/fastify-user-agent#readme",
   "dependencies": {
-    "fastify-plugin": "^5.0.0-pre.fv5.1",
+    "fastify-plugin": "^5.0.0",
     "useragent": "^2.3.0"
   },
   "devDependencies": {
-    "fastify": "^5.0.0-alpha.3",
+    "fastify": "^5.0.0",
     "standard": "^17.1.0",
     "tap": "^21.0.0"
   }
