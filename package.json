@@ -1,6 +1,6 @@
 {
   "name": "fastify-user-agent",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "User-agent information plugin for Fastify",
   "main": "index.js",
   "scripts": {
