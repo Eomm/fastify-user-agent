@@ -19,6 +19,7 @@
     "useragent"
   ],
   "author": "Manuel Spigolon <behemoth89@gmail.com> (https://github.com/Eomm)",
+  "funding": "https://github.com/Eomm/fastify-user-agent?sponsor=1",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Eomm/fastify-user-agent/issues"
