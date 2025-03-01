@@ -4,8 +4,8 @@
   "description": "User-agent information plugin for Fastify",
   "main": "index.js",
   "scripts": {
-    "lint": "standard",
-    "lint:fix": "standard --fix",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "test": "tap --show-full-coverage"
   },
   "repository": {
@@ -30,8 +30,9 @@
     "useragent": "^2.3.0"
   },
   "devDependencies": {
+    "eslint": "^9.21.0",
     "fastify": "^5.0.0",
-    "standard": "^17.1.0",
+    "neostandard": "^0.12.1",
     "tap": "^21.0.0"
   }
 }
