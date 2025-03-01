@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const fastify = require('fastify')
 
 const plugin = require('../index')
@@ -49,7 +49,7 @@ const us1Parsed = Object.freeze({
 async function buildApp (t, opts) {
   const app = fastify()
   app.register(plugin, opts)
-  t.teardown(() => app.close())
+  t.after(() => app.close())
 
   app.addHook('onRequest', function hook (request, reply, done) {
     if (request.headers.skip !== 'true') {
@@ -82,7 +82,7 @@ test('Basic usage', async t => {
     headers: { 'user-agent': us1 }
   })
 
-  t.strictSame(res.json(), us1Parsed)
+  t.assert.deepStrictEqual(res.json(), us1Parsed)
 })
 
 test('Check decorator', async t => {
@@ -95,7 +95,7 @@ test('Check decorator', async t => {
       url: '/',
       headers: { 'user-agent': us1 }
     })
-    t.strictSame(res.json(), us1Parsed)
+    t.assert.deepStrictEqual(res.json(), us1Parsed)
   }
 
   {
@@ -103,7 +103,7 @@ test('Check decorator', async t => {
       url: '/',
       headers: { 'user-agent': us1, skip: 'true' }
     })
-    t.strictSame(res.payload, '')
+    t.assert.deepStrictEqual(res.payload, '')
   }
 })
 
@@ -112,7 +112,7 @@ test('Change decorator name', async t => {
 
   const app = await buildApp(t, { name: 'foo' })
   app.get('/foo', (req, reply) => {
-    t.ok(req.foo, 'custom foo is defined')
+    t.assert.ok(req.foo, 'custom foo is defined')
     reply.send(req.foo)
   })
 
@@ -120,5 +120,5 @@ test('Change decorator name', async t => {
     url: '/foo',
     headers: { 'user-agent': us1, skip: 'true' }
   })
-  t.strictSame(res.json(), us1Parsed.onRequest)
+  t.assert.deepStrictEqual(res.json(), us1Parsed.onRequest)
 })
