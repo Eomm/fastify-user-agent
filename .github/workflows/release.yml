@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       semver:
-        description: 'The semver to use'
+        description: 'Release bump type'
         required: true
         default: 'patch'
         type: choice
@@ -12,22 +12,70 @@ on:
           - patch
           - minor
           - major
-  pull_request:
-    types: [closed]
+
+permissions:
+  contents: write
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # required for npm provenance via OIDC
+      contents: write # required to create the release commit and the tag
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - name: Check out repo
+        uses: actions/checkout@v4
         with:
-          node-version: 18
+          fetch-depth: 0
+          persist-credentials: false
 
-      - uses: nearform/optic-release-automation-action@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          github-token: ${{ secrets.github_token }}
-          npm-token: ${{ secrets.NPM_TOKEN }}
-          optic-token: ${{ secrets.OPTIC_TOKEN }}
-          semver: ${{ github.event.inputs.semver }}
-          sync-semver-tags: 'true'
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bump package version
+        run: |
+          NEW_VERSION=$(npm version "${{ inputs.semver || 'patch' }}" --no-git-tag-version)
+          git add -u
+          SAFE_NEW_VERSION=$(printf '%s' "${NEW_VERSION#v}" | tr -d '\r\n')
+          echo "NEW_VERSION=$SAFE_NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+
+      # Commits created through the GitHub API with GITHUB_TOKEN are signed by GitHub,
+      # so the release commit shows as "Verified".
+      # Tony133's fix: use jq -Rs to handle large files (piped input instead of argument)
+      - name: Push release commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          additions=$(git diff --cached --name-only | while IFS= read -r f; do
+            git show ":$f" | base64 -w0 | jq -Rs --arg path "$f" '{path: $path, contents: .}'
+          done | jq -s .)
+          jq -n \
+            --arg repo "$GITHUB_REPOSITORY" \
+            --arg branch "$GITHUB_REF_NAME" \
+            --arg oid "$(git rev-parse HEAD)" \
+            --arg msg "Bumped v$NEW_VERSION" \
+            --argjson additions "$additions" \
+            '{query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid url } } }",
+              variables: {input: {
+                branch: {repositoryNameWithOwner: $repo, branchName: $branch},
+                expectedHeadOid: $oid,
+                message: {headline: $msg},
+                fileChanges: {additions: $additions}}}}' \
+          | gh api graphql --input - --jq '.data.createCommitOnBranch.commit | "Created \(.oid) \(.url)"'
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.NEW_VERSION }}
+          target_commitish: ${{ github.ref }}
+          generate_release_notes: true
